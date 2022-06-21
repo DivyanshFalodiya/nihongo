@@ -1,8 +1,10 @@
 import { Box, Container, createTheme, ThemeProvider } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./components/Home";
+import Home from "./components/Home/Home";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
+import Quiz from "./components/Quiz/Quiz";
+import NotFound from "./components/NotFound/NotFound";
 
 function App() {
     const theme = createTheme({
@@ -13,21 +15,23 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Box
-                sx={{
-                    background: theme.palette.background.default,
-                    minHeight: "100vh",
-                }}
-            >
-                <Navbar />
-                <Container sx={{ py: 5 }}>
-                    <BrowserRouter>
+            <BrowserRouter>
+                <Box
+                    sx={{
+                        background: theme.palette.background.default,
+                        minHeight: "100vh",
+                    }}
+                >
+                    <Navbar />
+                    <Container sx={{ py: 5 }}>
                         <Routes>
                             <Route path="/" element={<Home />} />
+                            <Route path="/quiz/:type" element={<Quiz />} />
+                            <Route path="*" element={<NotFound />} />
                         </Routes>
-                    </BrowserRouter>
-                </Container>
-            </Box>
+                    </Container>
+                </Box>
+            </BrowserRouter>
         </ThemeProvider>
     );
 }

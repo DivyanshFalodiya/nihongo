@@ -3,32 +3,57 @@ import {
     Card,
     CardActionArea,
     CardContent,
-    CardMedia,
     Grid,
     Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import "./Home.css";
 
 const links = [
-    { path: "/hiragana-quiz", text: "あ", caption: "Hiragana" },
-    { path: "/katakana-quiz", text: "ア", caption: "Katakana" },
+    { path: "/quiz/hiragana", text: "あ", caption: "Hiragana" },
+    { path: "/quiz/katakana", text: "ア", caption: "Katakana" },
+    { path: "/quiz/kanji-n5", text: "本", caption: "Kanji (N5 Level)" },
 ];
 
 const Home = () => {
+    const navigate = useNavigate();
+
+    const gotoPage = (path) => {
+        navigate(path);
+    };
+
     return (
         <>
-            <Box>
-                <Typography variant="h3" color="primary">
-                    Practice and Learn
+            <Box className="group">
+                <Typography variant="h3" color="primary" align="left">
+                    Quiz
                 </Typography>
                 <Grid container>
                     {links.map((l, idx) => (
-                        <Grid item key={idx} sx={{ p: 2 }}>
+                        <Grid
+                            item
+                            key={idx}
+                            xs={12}
+                            sm={"auto"}
+                            sx={(theme) => ({
+                                p: 2,
+                                [theme.breakpoints.down("sm")]: {
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                },
+                            })}
+                        >
                             <Card
                                 sx={(theme) => ({
                                     width: "200px",
                                 })}
                             >
-                                <CardActionArea>
+                                <CardActionArea
+                                    onClick={() => {
+                                        gotoPage(l.path);
+                                    }}
+                                >
                                     <Typography
                                         variant="h1"
                                         fontSize={"10rem"}
