@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import Reset from "../Reset/Reset";
 
+// Rendered after the quiz ends
 const PostQuiz = ({ state, reset }) => {
     const correct = state.state.correct;
     const incorrect = state.state.incorrect;
@@ -20,17 +21,26 @@ const PostQuiz = ({ state, reset }) => {
         return (
             <>
                 <TableCell>
-                    <Typography color={head ? "primary" : "text.primary"}>
+                    <Typography
+                        color={head ? "primary" : "text.primary"}
+                        align="center"
+                    >
                         {question}
                     </Typography>
                 </TableCell>
                 <TableCell>
-                    <Typography color={head ? "primary" : "text.primary"}>
+                    <Typography
+                        color={head ? "primary" : theme.palette.success.main}
+                        align="center"
+                    >
                         {answer}
                     </Typography>
                 </TableCell>
                 <TableCell>
-                    <Typography color={head ? "primary" : "text.primary"}>
+                    <Typography
+                        color={head ? "primary" : "error"}
+                        align="center"
+                    >
                         {given}
                     </Typography>
                 </TableCell>
@@ -117,8 +127,8 @@ const PostQuiz = ({ state, reset }) => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {state.wrong.map((w) => (
-                                        <TableRow>
+                                    {state.wrong.map((w, idx) => (
+                                        <TableRow key={idx}>
                                             {renderWrongSubmission(
                                                 w.question,
                                                 w.answer,

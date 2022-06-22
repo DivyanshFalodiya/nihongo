@@ -12,7 +12,7 @@ import "./Home.css";
 const links = [
     { path: "/quiz/hiragana", text: "あ", caption: "Hiragana" },
     { path: "/quiz/katakana", text: "ア", caption: "Katakana" },
-    { path: "/quiz/kanji-n5", text: "本", caption: "Kanji (N5 Level)" },
+    { path: "/quiz/vocab", text: "本", caption: "Vocab" },
 ];
 
 const Home = () => {

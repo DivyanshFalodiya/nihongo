@@ -1,11 +1,18 @@
-import { Box, Button, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    InputLabel,
+    MenuItem,
+    Select,
+    Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 
-// Pre to Quiz Start
-const PreQuiz = ({ startQuiz, type }) => {
+// Rendered beore the quiz starts
+const PreQuiz = ({ startQuiz, type, isKana, level, setLevel, isDisabled }) => {
     const [timer, setTimer] = useState(5);
     const [inter, setInter] = useState(null);
-    const [disabled, setDisabled] = useState(false);
+    const [disabled, setDisabled] = useState(isDisabled);
 
     // Handle Start Button
     const handleClick = () => {
@@ -17,6 +24,11 @@ const PreQuiz = ({ startQuiz, type }) => {
         );
     };
 
+    // Handle Level Selection
+    const handleSelect = (e) => {
+        setLevel(e.target.value);
+    };
+
     // On timer change
     useEffect(() => {
         if (timer === 0) {
@@ -25,14 +37,34 @@ const PreQuiz = ({ startQuiz, type }) => {
         }
     }, [timer]);
 
+    useEffect(() => {
+        setDisabled(isDisabled);
+    }, [isDisabled]);
+
     return (
         <Box sx={{ py: 3 }}>
             <Typography variant="h6" color="text.primary">
                 The quiz will be timed for{" "}
-                <span className="highlight">30 seconds</span>. Please click on
-                the <span className="highlight">START</span> button to begin the
-                quiz.
+                <span className="highlight">30 seconds</span>. Try to maximize
+                the number of questions attempted as well as correct answers.{" "}
+                <br />
+                Please click on the <span className="highlight">
+                    START
+                </span>{" "}
+                button to begin the quiz when you are ready.
             </Typography>
+            {!isKana && (
+                <Box display="flex" alignItems="center">
+                    <InputLabel>JLPT Level</InputLabel>
+                    <Select value={level} onChange={handleSelect} sx={{ m: 2 }}>
+                        {[1, 2, 3, 4, 5].map((val, idx) => (
+                            <MenuItem value={val} key={idx}>
+                                N{val}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </Box>
+            )}
             <Box display={"flex"} alignItems={"center"} sx={{ my: 3 }}>
                 <Button
                     variant="contained"
