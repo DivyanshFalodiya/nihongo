@@ -6,18 +6,16 @@ import {
     LinearProgress,
     Link as MLink,
     Typography,
-    useTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { setDictData } from "../../features/dictionary/dictSlice";
 import Kanji from "../Kanji/Kanji";
 
 const Dictionary = () => {
-    const theme = useTheme();
     const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     let query = searchParams.get("query");
     const [loading, setLoading] = useState(query ? true : false);
     const [search, setSearch] = useState(query || "");
