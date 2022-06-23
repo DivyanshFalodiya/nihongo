@@ -37,7 +37,6 @@ const Kanji = ({ kanji }) => {
             setLoading(true);
             fetchKanji(kanji, abortController)
                 .then((res) => {
-                    console.log(res);
                     setData(res);
                     setLoading(false);
                 })
