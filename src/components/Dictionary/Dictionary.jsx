@@ -17,7 +17,7 @@ const Dictionary = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     let query = searchParams.get("query");
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState(query || "");
     const navigate = useNavigate();
 
@@ -128,31 +128,33 @@ const Dictionary = () => {
                     </IconButton>
                 </Box>
             </Box>
-            <Box>
-                {!loading && data.length === 0 ? (
-                    <Typography color="error">
-                        No kanji exists for the word "{query}"
-                    </Typography>
-                ) : !loading ? (
-                    <>
-                        <Typography
-                            color="text.primary"
-                            variant="h5"
-                            sx={{ mb: 1 }}
-                        >
-                            {firstLetterUpper(query)}
+            {query && (
+                <Box>
+                    {!loading && data.length === 0 ? (
+                        <Typography color="error">
+                            No kanji exists for the word "{query}"
                         </Typography>
-                        <Box>
-                            {data.map((kanji, idx) => (
-                                <Kanji
-                                    kanji={kanji.kanji.character}
-                                    key={idx}
-                                />
-                            ))}
-                        </Box>
-                    </>
-                ) : null}
-            </Box>
+                    ) : !loading ? (
+                        <>
+                            <Typography
+                                color="text.primary"
+                                variant="h5"
+                                sx={{ mb: 1 }}
+                            >
+                                {firstLetterUpper(query)}
+                            </Typography>
+                            <Box>
+                                {data.map((kanji, idx) => (
+                                    <Kanji
+                                        kanji={kanji.kanji.character}
+                                        key={idx}
+                                    />
+                                ))}
+                            </Box>
+                        </>
+                    ) : null}
+                </Box>
+            )}
         </Box>
     );
 };
