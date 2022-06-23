@@ -1,11 +1,11 @@
 import { Box, Container, createTheme, ThemeProvider } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./components/Home/Home";
-import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import Quiz from "./components/Quiz/Quiz";
 import NotFound from "./components/NotFound/NotFound";
 import Dictionary from "./components/Dictionary/Dictionary";
+import "./App.css";
 
 function App() {
     const theme = createTheme({

@@ -8,6 +8,8 @@ import PostQuiz from "./PostQuiz";
 import hiragana from "../../data/hiragana.json";
 import katakana from "../../data/katakana.json";
 import Wrapper from "./Wrapper";
+import { useDispatch, useSelector } from "react-redux";
+import { setQuizData } from "../../features/quiz/quizSlice";
 import "./Quiz.css";
 
 // Valid types
@@ -16,12 +18,20 @@ const types = ["hiragana", "katakana", "vocab"];
 // Quiz Component
 const Quiz = () => {
     const { type } = useParams();
+    const navigate = useNavigate();
+
     const [status, setStatus] = useState(-1); // -1 0 1
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
     const [isKana, setIsKana] = useState(true);
     const [level, setLevel] = useState(5);
     const [endState, setEndState] = useState();
-    const navigate = useNavigate();
+
+    const data = useSelector((state) => {
+        return type === "vocab"
+            ? state.quiz[type + "-" + level]
+            : state.quiz[type];
+    });
+    const dispatch = useDispatch();
 
     // Handle Quiz Start
     const handleStart = () => setStatus(0);
@@ -44,7 +54,7 @@ const Quiz = () => {
             const res = await fetch(
                 "https://jlpt-keiz.vercel.app/api/words?level=" +
                     lev +
-                    "&limit=1000",
+                    "&limit=200",
                 {
                     signal: abortController.signal,
                 }
@@ -62,9 +72,16 @@ const Quiz = () => {
         if (!type) navigate("/");
         if (types.findIndex((t) => t === type) === -1) navigate("/");
 
-        if (type === "hiragana") setData(hiragana);
-        else if (type === "katakana") setData(katakana);
-        else {
+        if (type === "hiragana") {
+            if (!data) {
+                dispatch(setQuizData({ data: hiragana, key: type }));
+            }
+            // setData(hiragana);
+        } else if (type === "katakana") {
+            if (!data) {
+                dispatch(setQuizData({ data: katakana, key: type }));
+            }
+        } else {
             setIsKana(false);
         }
     }, []);
@@ -73,10 +90,18 @@ const Quiz = () => {
     useEffect(() => {
         let abortController = new AbortController();
         if (type !== "hiragana" && type !== "katakana") {
-            setData([]);
-            fetchVocab(level, abortController).then((res) => {
-                if (res) setData(res.words);
-            });
+            if (!data) {
+                // setData([]);
+                fetchVocab(level, abortController).then((res) => {
+                    if (res)
+                        dispatch(
+                            setQuizData({
+                                data: res.words,
+                                key: type + "-" + level,
+                            })
+                        );
+                });
+            }
         }
         return () => {
             abortController.abort();
@@ -96,17 +121,17 @@ const Quiz = () => {
                         type={type.toUpperCase()}
                         setLevel={setLevel}
                         level={level}
-                        isDisabled={data.length === 0}
+                        isDisabled={!data || data.length === 0}
                     />
                 )}
-                {data.length > 0 && status === 0 && (
+                {data && data.length > 0 && status === 0 && (
                     <Wrapper
                         data={data}
                         endQuiz={handleEnd}
                         Component={isKana ? Kana : Vocab}
                     />
                 )}
-                {data.length > 0 && status === 1 && (
+                {data && data.length > 0 && status === 1 && (
                     <PostQuiz state={endState} reset={handleReset} />
                 )}
             </Box>
