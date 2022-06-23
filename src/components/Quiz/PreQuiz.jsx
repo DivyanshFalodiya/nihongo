@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 
 // Rendered beore the quiz starts
 const PreQuiz = ({ startQuiz, type, isKana, level, setLevel, isDisabled }) => {
-    const [timer, setTimer] = useState(5);
+    const [timer, setTimer] = useState(3);
     const [inter, setInter] = useState(null);
     const [disabled, setDisabled] = useState(isDisabled);
 

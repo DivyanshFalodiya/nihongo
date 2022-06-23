@@ -75,7 +75,7 @@ const Quiz = () => {
         if (type !== "hiragana" && type !== "katakana") {
             setData([]);
             fetchVocab(level, abortController).then((res) => {
-                setData(res.words);
+                if (res) setData(res.words);
             });
         }
         return () => {
