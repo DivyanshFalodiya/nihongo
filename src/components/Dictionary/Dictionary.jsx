@@ -9,17 +9,22 @@ import {
     useTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { setDictData } from "../../features/dictionary/dictSlice";
 import Kanji from "../Kanji/Kanji";
 
 const Dictionary = () => {
     const theme = useTheme();
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     let query = searchParams.get("query");
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(query ? true : false);
     const [search, setSearch] = useState(query || "");
-    const navigate = useNavigate();
+
+    // Cached result
+    const data = useSelector((state) => state.dict[query]);
+    const dispatch = useDispatch();
 
     // Fetch Search Results from Jisho.org
     const fetchData = async (query, abortController) => {
@@ -48,7 +53,6 @@ const Dictionary = () => {
     // Handle key down
     const handleKeyDown = (e) => {
         if (e.keyCode === 13) {
-            setLoading(true);
             startSearch();
         }
     };
@@ -69,18 +73,20 @@ const Dictionary = () => {
     useEffect(() => {
         let abortController = new AbortController();
 
-        if (query) {
+        if (!data && query) {
             setLoading(true);
-            setData([]);
             fetchData(query, abortController)
                 .then((res) => {
                     setLoading(false);
-                    setData(res);
+                    // setData(res);
+                    dispatch(setDictData({ data: res, key: query }));
                 })
                 .catch((err) => {
                     // setLoading(false);
                     console.log(err);
                 });
+        } else {
+            setLoading(false);
         }
 
         return () => {
@@ -129,11 +135,11 @@ const Dictionary = () => {
             </Box>
             {query && (
                 <Box>
-                    {!loading && data.length === 0 ? (
+                    {!loading && (!data || data.length === 0) ? (
                         <Typography color="error">
                             No kanji exists for the word "{query}"
                         </Typography>
-                    ) : !loading ? (
+                    ) : !loading && data ? (
                         <>
                             <Typography
                                 color="text.primary"

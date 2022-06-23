@@ -6,11 +6,17 @@ import {
     Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setKanjiData } from "../../features/kanji/kanjiSlice";
 import Examples from "./Examples";
 
 const Kanji = ({ kanji }) => {
-    const [data, setData] = useState(null);
+    // const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    // Cached data
+    const data = useSelector((state) => state.kanji[kanji]);
+    const dispatch = useDispatch();
 
     // Fetch some kanji
     const fetchKanji = async (k, abortController) => {
@@ -33,17 +39,20 @@ const Kanji = ({ kanji }) => {
     // On kanji change
     useEffect(() => {
         let abortController = new AbortController();
-        if (kanji) {
+        if (!data && kanji) {
             setLoading(true);
             fetchKanji(kanji, abortController)
                 .then((res) => {
-                    setData(res);
+                    // setData(res);
+                    dispatch(setKanjiData({ data: res, key: kanji }));
                     setLoading(false);
                 })
                 .catch((e) => {
                     console.log(e);
                     // setLoading(false);
                 });
+        } else {
+            setLoading(false);
         }
         return () => {
             abortController.abort();
