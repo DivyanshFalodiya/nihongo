@@ -18,6 +18,8 @@ const selectOption = (data, n) => {
 
 // Kana Card
 const Vocab = ({ answer, setAnswer, handleSubmit, cur, data }) => {
+    const correct = new Audio("/sounds/correct.wav");
+    const incorrect = new Audio("/sounds/wrong.mp3");
     const [options, setOptions] = useState([]);
 
     // Handle Key
@@ -25,6 +27,11 @@ const Vocab = ({ answer, setAnswer, handleSubmit, cur, data }) => {
         const ans = e.target.value;
         if (ans) {
             setAnswer(ans);
+            if (cur.meaning.toLowerCase() !== ans.toLowerCase()) {
+                incorrect.play();
+            } else {
+                correct.play();
+            }
             handleSubmit(
                 cur.meaning.toLowerCase() !== ans.toLowerCase(),
                 cur.word,

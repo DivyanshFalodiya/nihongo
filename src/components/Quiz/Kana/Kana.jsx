@@ -2,8 +2,16 @@ import { Card, InputBase, Typography } from "@mui/material";
 
 // Kana Card
 const Kana = ({ answer, setAnswer, handleSubmit, cur }) => {
+    const correct = new Audio("/sounds/correct.wav");
+    const incorrect = new Audio("/sounds/wrong.mp3");
+
     const handleKey = (e) => {
         if (e.keyCode === 13 && answer) {
+            if (cur.roumaji.toLowerCase() !== answer.toLowerCase()) {
+                incorrect.play();
+            } else {
+                correct.play();
+            }
             handleSubmit(
                 cur.roumaji.toLowerCase() !== answer.toLowerCase(),
                 cur.kana,

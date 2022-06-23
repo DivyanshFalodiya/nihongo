@@ -45,12 +45,12 @@ const PreQuiz = ({ startQuiz, type, isKana, level, setLevel, isDisabled }) => {
         <Box sx={{ py: 3 }}>
             <Typography variant="h6" color="text.primary">
                 The quiz will be timed for{" "}
-                <span className="highlight">30 seconds</span>. Try to maximize
-                the number of questions attempted as well as correct answers.{" "}
-                <br />
-                Please click on the <span className="highlight">
-                    START
-                </span>{" "}
+                <span className="highlight">30 seconds</span>. The questions
+                will be chosen randomly by the system. Try to maximize the
+                number of questions attempted as well as correct answers. <br />
+            </Typography>
+            <Typography variant="h6" color="text.primary" sx={{ mt: 2 }}>
+                Please click on the <span className="highlight">START</span>{" "}
                 button to begin the quiz when you are ready.
             </Typography>
             {!isKana && (

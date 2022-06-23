@@ -39,12 +39,15 @@ const Quiz = () => {
     };
 
     // Fetch vacab by level
-    const fetchVocab = async (lev) => {
+    const fetchVocab = async (lev, abortController) => {
         try {
             const res = await fetch(
                 "https://jlpt-keiz.vercel.app/api/words?level=" +
                     lev +
-                    "&limit=1000"
+                    "&limit=1000",
+                {
+                    signal: abortController.signal,
+                }
             );
             if (res.ok) {
                 return await res.json();
@@ -68,12 +71,16 @@ const Quiz = () => {
 
     // On level change
     useEffect(() => {
-        setData([]);
+        let abortController = new AbortController();
         if (type !== "hiragana" && type !== "katakana") {
-            fetchVocab(level).then((res) => {
+            setData([]);
+            fetchVocab(level, abortController).then((res) => {
                 setData(res.words);
             });
         }
+        return () => {
+            abortController.abort();
+        };
     }, [level]);
 
     return (
